@@ -27,7 +27,7 @@ The codebase provides tools for training, evaluation, visualization, and compari
 ## System Requirements
 
 ### Dependencies
-- Python 3.7+
+- Python 3.12.10
 - PyTorch
 - Gymnasium
 - NumPy
