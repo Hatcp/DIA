@@ -30,7 +30,7 @@ This framework implements and evaluates two multi-agent reinforcement learning a
 
 1. **HSEAC (Hierarchical Shared Experience Actor-Critic)**: A hierarchical approach with manager and worker networks, where the manager assigns goals (zones) to worker agents, and workers execute actions to achieve these goals.
 
-2. **SEAC (Equalized Shared Experience Actor-Critic)**: A flat architecture without hierarchy, where agents learn independently but share experiences.
+2. **SEAC (Shared Experience Actor-Critic)**: A flat architecture without hierarchy, where agents learn independently but share experiences.
 
 The codebase provides tools for training, evaluation, visualization, and comparison of these algorithms.
 
