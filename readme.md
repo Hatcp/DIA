@@ -199,7 +199,7 @@ python fixed_simple_evaluation.py --env_name tarware-tiny-3agvs-2pickers-globalo
 
 ## Visualization Guide
 
-### Visualizing HSEAC Agents
+### Visualizing Trained HSEAC Agents
 
 ```bash
 python visualize_hseac_tarware.py --env_name tarware-tiny-3agvs-2pickers-globalobs-v1 --model_path models/hseac_test/final_model --num_episodes 5 --delay 0.1
