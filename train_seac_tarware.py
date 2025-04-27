@@ -21,7 +21,7 @@ def parse_args():
                       help='Random seed for reproducibility')
     
     # Training parameters
-    parser.add_argument('--n_episodes', type=int, default=10000,
+    parser.add_argument('--n_episodes', type=int, default=1000,
                       help='Number of episodes to train')
     parser.add_argument('--max_steps', type=int, default=500,
                       help='Maximum steps per episode')

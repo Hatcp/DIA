@@ -27,7 +27,7 @@ The codebase provides tools for training, evaluation, visualization, and compari
 ## System Requirements
 
 ### Dependencies
-- Python 3.12.10
+- Python 3.7+
 - PyTorch
 - Gymnasium
 - NumPy
@@ -91,26 +91,48 @@ The environment rewards agents for:
 - Delivering shelves to goals
 - Returning shelves to storage locations
 
+![TARWare Environment](Labelled_Environment.png)
+
+*In the warehouse layout above: Dark blue and teal squares represent shelf locations, gray squares are delivery locations, orange circles are AGV agents, orange diamonds are picker agents, and red circles represent AGVs carrying items. The black lines in the shelves represent pick requests.*
+
 ## Training Guide
 
 ### Training HSEAC
+
+You can use the full command to explicitly specify all parameters:
 
 ```bash
 python train_hseac_tarware.py --train --env_name tarware-tiny-3agvs-2pickers-globalobs-v1 --n_episodes 10000 --max_steps 500 --gamma 0.99 --manager_lr 3e-4 --worker_lr 3e-4 --ent_coef 0.01 --lambda_coef 1.0 --goal_completion_steps 20 --exp_name hseac_test --render
 ```
 
+Or use a simplified command that relies on default parameter values:
+
+```bash
+python train_hseac_tarware.py --env_name tarware-tiny-3agvs-2pickers-globalobs-v1 --n_episodes 10000 --train
+```
+
 ### Training SEAC
+
+Full command with explicit parameters:
 
 ```bash
 python train_seac_tarware.py --train --env_name tarware-tiny-3agvs-2pickers-globalobs-v1 --n_episodes 10000 --max_steps 500 --gamma 0.99 --lr 3e-4 --ent_coef 0.01 --lambda_coef 1.0 --exp_name seac_test --render
 ```
 
+Simplified command using defaults:
+
+```bash
+python train_seac_tarware.py --env_name tarware-tiny-3agvs-2pickers-globalobs-v1 --n_episodes 10000 --train
+```
+
 ### Key Training Parameters
+
+You can modify these parameters either through command-line arguments or by directly changing the default values in the code:
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `--env_name` | Environment name | tarware-tiny-3agvs-2pickers-globalobs-v1 |
-| `--n_episodes` | Number of training episodes | 10000 |
+| `--n_episodes` | Number of training episodes | 1000 |
 | `--max_steps` | Maximum steps per episode | 500 |
 | `--gamma` | Discount factor | 0.99 |
 | `--manager_lr` | Learning rate for HSEAC manager | 3e-4 |
@@ -121,6 +143,8 @@ python train_seac_tarware.py --train --env_name tarware-tiny-3agvs-2pickers-glob
 | `--goal_completion_steps` | Max steps before goal completion (HSEAC) | 20 |
 | `--exp_name` | Experiment name | auto-generated |
 | `--render` | Enable rendering during training | False |
+
+When using the simplified command syntax, all unspecified parameters will use these default values. For frequent experimentation with different hyperparameters, you may find it more convenient to modify the defaults in the source code rather than typing out all parameters in each command.
 
 ### Where Models Are Saved
 
@@ -225,16 +249,33 @@ tarware-medium-5agvs-3pickers-globalobs-v1
 
 Both algorithms have various hyperparameters that can be adjusted:
 
-For HSEAC:
-- Manager and worker network architecture (`manager_hidden_dims`, `worker_hidden_dims`)
-- Learning rates (`manager_lr`, `worker_lr`)
-- Goal completion criteria (`goal_completion_steps`)
-- Exploitation/exploration balance (`det_action_start_prob`, `det_action_final_prob`, `det_action_anneal_episodes`)
+### Action Annealing Parameters
 
-For SEAC:
-- Network architecture (`hidden_dims`)
-- Learning rate (`lr`)
-- Experience sharing (`lambda_coef`, `clip_importance_ratio`)
+Both HSEAC and SEAC algorithms use an annealing process to gradually transition from exploration to exploitation during training. This is controlled by the following parameters in the code:
+
+```python
+# In hseac_tarware.py and seac_tarware.py
+det_action_start_prob=0.0,    # Starting probability of using deterministic actions
+det_action_final_prob=0.8,    # Final probability of using deterministic actions
+det_action_anneal_episodes=700,  # Episodes over which to anneal
+```
+
+These parameters can be modified in the `__init__` method of both algorithm classes:
+
+- **det_action_start_prob**: Initial probability of selecting actions deterministically (exploitation) instead of randomly (exploration). Set to 0.0 for pure exploration at the beginning.
+
+- **det_action_final_prob**: Final probability of selecting actions deterministically. Higher values (e.g., 0.8-0.9) favor exploitation in later training stages.
+
+- **det_action_anneal_episodes**: Number of episodes over which to linearly transition from start_prob to final_prob. This controls how quickly the algorithm shifts from exploration to exploitation.
+
+#### Tuning Guidelines:
+
+- **For complex environments**: Use longer annealing periods (800-1000 episodes) to ensure sufficient exploration
+- **For simpler environments**: Shorter annealing periods (400-600 episodes) may suffice
+- **Exploration-heavy approach**: Lower final_prob (0.5-0.7) maintains more randomness throughout training
+- **Exploitation-focused approach**: Higher final_prob (0.8-0.95) results in more deterministic behavior
+
+The annealing schedule also affects the learning rate through schedulers that reduce the learning rate over the same period, helping stabilize learning as the policy becomes more deterministic.
 
 ## Output Files and Results
 
