@@ -1,3 +1,13 @@
+## References and Citations
+
+### TARWare Environment
+
+This implementation uses the TARWare (Task Allocation Robotic Warehouse) environment. 
+
+https://github.com/uoe-agents/task-assignment-robotic-warehouse
+
+TARWare is an extension of warehouse simulation environments for reinforcement learning. The original repository would contain additional information, licensing details, and proper citation guidelines.
+
 # HSEAC vs SEAC: TARWare Reinforcement Learning Framework
 
 ## Table of Contents
