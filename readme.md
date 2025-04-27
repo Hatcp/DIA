@@ -83,7 +83,7 @@ The codebase consists of the following key files:
 - **Workers**: Execute actions to achieve assigned goals
 - **Experience Sharing**: Workers share experiences with similar goals
 
-### SEAC (Equalized Shared Experience Actor-Critic)
+### SEAC (Shared Experience Actor-Critic)
 - **Architecture**: Flat actor-critic networks for each agent
 - **Policy**: Each agent selects actions directly based on observations
 - **Experience Sharing**: Agents share experiences with importance sampling
