@@ -91,7 +91,9 @@ The environment rewards agents for:
 - Delivering shelves to goals
 - Returning shelves to storage locations
 
-![TARWare Environment](Labelled_Environment.png)
+<div style="text-align: center;">
+<img src="Labelled_Environment.png" alt="TARWare Environment" width="200">
+</div>
 
 *In the warehouse layout above: Dark blue and teal squares represent shelf locations, gray squares are delivery locations, orange circles are AGV agents, orange diamonds are picker agents, and red circles represent AGVs carrying items. The black lines in the shelves represent pick requests.*
 
